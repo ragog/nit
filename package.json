@@ -1,12 +1,16 @@
 {
   "name": "nit",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "minimal note taking command line util",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "ragog",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.1.0"
+  }
 }
