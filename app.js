@@ -24,14 +24,25 @@ cli
 	.description('read note')
 	.argument('<title>', 'title of note')
 	.action((arg_title) => {
+
 		const file = readFileSync(active_collection_file);
 		const json = JSON.parse(file);
-		const note = json.find((element) => element.arg_title === arg_title);
-		if (note){
+		const note_array = json.filter((element) => element.arg_title === arg_title);
+		
+        if (note_array.length > 1){
+            console.log('There are multiple notes with that title:')
+            note_array.forEach(note => {
+                console.log(`${note.arg_body} (${new Date(note.timestamp).toISOString()})`);
+            });
+            return;
+        };
+        
+        if (note_array.length === 1){
             console.log(`${note.arg_body}`);
-        } else {
-            console.log(`No such note found in collection ${active_collection_file}`)
-        }
+            return;
+        };
+            
+        console.log(`No such note found in collection ${active_collection_file}`)
 	});
 
 cli
