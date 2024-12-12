@@ -24,59 +24,74 @@ cli
 	.description('read note')
 	.argument('<title>', 'title of note')
 	.action((arg_title) => {
-
 		const file = readFileSync(active_collection_file);
 		const json = JSON.parse(file);
 		const note_array = json.filter((element) => element.arg_title === arg_title);
-		
-        if (note_array.length > 1){
-            console.log('There are multiple notes with that title:')
-            note_array.forEach(note => {
-                console.log(`${note.arg_body} (${new Date(note.timestamp).toISOString()})`);
-            });
-            return;
-        };
-        
-        if (note_array.length === 1){
-            console.log(`${note.arg_body}`);
-            return;
-        };
-            
-        console.log(`No such note found in collection ${active_collection_file}`)
+
+		if (note_array.length > 1) {
+			console.log('There are multiple notes with that title:');
+			note_array.forEach((note) => {
+				console.log(`${note.arg_body} (${new Date(note.timestamp).toISOString()})`);
+			});
+			return;
+		}
+
+		if (note_array.length === 1) {
+			console.log(`${note_array[0].arg_body}`);
+			return;
+		}
+
+		console.log(`No such note found in collection ${active_collection_file}`);
+	});
+
+cli
+	.command('l')
+	.description('list notes')
+	.action(() => {
+		const file = readFileSync(active_collection_file);
+		const json = JSON.parse(file);
+
+		if (json.length > 0) {
+			console.log(`Notes in ${active_collection_file}:`);
+			json.forEach((note) => {
+				console.log(`${note.arg_title} (${new Date(note.timestamp).toISOString()})`);
+			});
+			return;
+		}
+
+		console.log(`No notes founds in ${active_collection_file}`);
 	});
 
 cli
 	.command('c') // collection
 	.description('switch collection')
 	.argument('<name>', 'name of collection')
-    .option('-n, --new', 'create new collection')
+	.option('-n, --new', 'create new collection')
 	.action((arg_collection, option) => {
+		let collection_file;
+		const collection_file_path = `${arg_collection}.json`;
 
-        let collection_file;
-        const collection_file_path = `${arg_collection}.json`
+		try {
+			collection_file = readFileSync(collection_file_path);
+		} catch (e) {}
 
-        try {
-            collection_file = readFileSync(collection_file_path);
-        } catch (e) {}
+		const state_file = readFileSync('state.json');
+		const json_state = JSON.parse(state_file);
+		json_state.active_collection = arg_collection;
 
-        const state_file = readFileSync('state.json');
-        const json_state = JSON.parse(state_file);
-        json_state.active_collection = arg_collection;
+		if (collection_file) {
+			writeFileSync('state.json', JSON.stringify(json_state));
+			return;
+		}
 
-        if (collection_file){
-            writeFileSync('state.json', JSON.stringify(json_state));
-            return;
-        }
+		if (Object.keys(option).length > 0) {
+			writeFileSync(collection_file_path, JSON.stringify([]));
+			writeFileSync('state.json', JSON.stringify(json_state));
+			return;
+		}
 
-        if (Object.keys(option).length > 0 ) {
-            writeFileSync(collection_file_path, JSON.stringify([]));
-            writeFileSync('state.json', JSON.stringify(json_state));
-            return;
-        }
-
-        console.log('Collection not found. Use -n option to create new collection.')
-        
-    });
+		console.log('Collection not found. Use -n option to create new collection.');
+	});
 
 let active_collection_file;
 
