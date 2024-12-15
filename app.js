@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { error } from 'console';
 import { readFileSync, writeFileSync } from 'fs';
 
 export function createCli() {

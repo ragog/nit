@@ -4,7 +4,7 @@
   "description": "minimal note taking command line util",
   "main": "app.js",
   "bin": {
-    "nit": "index.js"
+    "nit": "app.js"
   },
   "type": "module",
   "scripts": {
