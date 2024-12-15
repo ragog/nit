@@ -1,6 +1,6 @@
 {
-  "name": "nit",
-  "version": "0.3.0",
+  "name": "nit-cli",
+  "version": "1.0.0",
   "description": "minimal note taking command line util",
   "main": "app.js",
   "bin": {
@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "author": "ragog",
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "dependencies": {
     "commander": "^12.1.0"
   },
