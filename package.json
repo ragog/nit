@@ -1,5 +1,5 @@
 {
-  "name": "nit-cli",
+  "name": "nit-notes",
   "version": "1.0.0",
   "description": "minimal note taking command line util",
   "main": "app.js",
