@@ -1,8 +1,11 @@
 {
   "name": "nit",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "description": "minimal note taking command line util",
-  "main": "index.js",
+  "main": "app.js",
+  "bin": {
+    "nit": "index.js"
+  },
   "type": "module",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"

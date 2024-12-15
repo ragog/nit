@@ -1,11 +1,21 @@
+#!/usr/bin/env node
+
 import { Command } from 'commander';
 import { error } from 'console';
 import { readFileSync, writeFileSync } from 'fs';
 
 export function createCli() {
 	const cli = new Command();
+	const VERSION = '0.3.0'
 
-	cli.name('nit').description('Minimal CLI to write notes').version('0.2.0');
+	cli.name('nit').description('Minimal CLI to write notes').version(VERSION);
+
+	cli
+		.option('-v')
+		.description('version')
+		.action(() => {
+			console.log(VERSION);
+		});
 
 	cli
 		.command('w')
