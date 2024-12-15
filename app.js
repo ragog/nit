@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from 'fs';
 export function createCli() {
 	const cli = new Command();
 
-	cli.name('nit').description('Minimal CLI to write notes').version('0.0.1');
+	cli.name('nit').description('Minimal CLI to write notes').version('0.2.0');
 
 	cli
 		.command('w')
