@@ -102,10 +102,4 @@ describe('CLI Tests, assuming initialized status', () => {
 		expect(consoleSpy).toHaveBeenCalledWith('Collection not found. Use -n option to create new collection.');
 	});
 
-	test('should return version', async () => {
-		await cli.parseAsync(['node', 'script', '-v']);
-
-		expect(consoleSpy).toHaveBeenCalledWith('1.0.3');
-	});
-
 });
