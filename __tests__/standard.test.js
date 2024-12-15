@@ -105,7 +105,7 @@ describe('CLI Tests, assuming initialized status', () => {
 	test('should return version', async () => {
 		await cli.parseAsync(['node', 'script', '-v']);
 
-		expect(consoleSpy).toHaveBeenCalledWith('1.0.2');
+		expect(consoleSpy).toHaveBeenCalledWith('1.0.3');
 	});
 
 });

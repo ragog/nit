@@ -5,7 +5,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 
 export function createCli() {
 	const cli = new Command();
-	const VERSION = '1.0.2';
+	const VERSION = '1.0.3';
 
 	cli.name('nit').description('Minimal CLI to write notes').version(VERSION);
 
@@ -144,7 +144,7 @@ export function createCli() {
 	}
 
 	// Only call parse() when the script is executed directly, not when imported.
-	if (import.meta.url === `file://${process.argv[1]}`) {
+	if (!(import.meta.url.includes('jest'))) {
 		cli.parse(process.argv);
 	}
 
