@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals'; // Explicit import of Jest globals
-import { createCli } from '../app.js'; // Replace with the actual file name
+import { createCli } from '../src/app.js'; // Replace with the actual file name
 import * as fs from 'fs';
 import mockFs from 'mock-fs';
 
@@ -45,6 +45,31 @@ describe('CLI Tests, assuming initialized status', () => {
 		await cli.parseAsync(['node', 'script', 'r', 'TestTitle']);
 
 		expect(consoleSpy).toHaveBeenCalledWith('TestBody');
+	});
+
+	test('should list notes with same title', async () => {
+		// Prepopulate two notes with the same title
+		const notes = [
+			{ arg_title: 'TestTitle', arg_body: 'TestBody', timestamp: Date.now() },
+			{ arg_title: 'TestTitle', arg_body: 'TestBody123', timestamp: Date.now() },
+		];
+		fs.writeFileSync('default_collection.json', JSON.stringify(notes));
+
+		await cli.parseAsync(['node', 'script', 'r', 'TestTitle']);
+
+		expect(consoleSpy).toHaveBeenCalledWith('There are multiple notes with that title:');
+	});
+
+	test('should mention no notes with such title exist', async () => {
+		const notes = [
+			{ arg_title: 'TestTitle1', arg_body: 'TestBody', timestamp: Date.now() },
+			{ arg_title: 'TestTitle2', arg_body: 'TestBody123', timestamp: Date.now() },
+		];
+		fs.writeFileSync('default_collection.json', JSON.stringify(notes));
+
+		await cli.parseAsync(['node', 'script', 'r', 'TestTitle']);
+
+		expect(consoleSpy).toHaveBeenCalledWith('No such note found in collection default_collection.json');
 	});
 
 	test('should list all notes in active collection', async () => {

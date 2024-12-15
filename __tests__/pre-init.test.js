@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals'; // Explicit import of Jest globals
-import { createCli } from '../app.js'; // Replace with the actual file name
+import { createCli } from '../src/app.js'; // Replace with the actual file name
 import * as fs from 'fs';
 import mockFs from 'mock-fs';
 
