@@ -3,7 +3,7 @@ import { createCli } from '../app.js'; // Replace with the actual file name
 import * as fs from 'fs';
 import mockFs from 'mock-fs';
 
-describe('CLI Tests', () => {
+describe('CLI Tests, assuming initialized status', () => {
 	let cli;
 	let consoleSpy;
 
@@ -105,6 +105,7 @@ describe('CLI Tests', () => {
 	test('should return version', async () => {
 		await cli.parseAsync(['node', 'script', '-v']);
 
-		expect(consoleSpy).toHaveBeenCalledWith('1.0.1');
+		expect(consoleSpy).toHaveBeenCalledWith('1.0.2');
 	});
+
 });

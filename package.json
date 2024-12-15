@@ -1,6 +1,6 @@
 {
   "name": "nit-notes",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "minimal note taking command line util",
   "main": "app.js",
   "bin": {

@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 
 export function createCli() {
 	const cli = new Command();
-	const VERSION = '1.0.1'
+	const VERSION = '1.0.2';
 
 	cli.name('nit').description('Minimal CLI to write notes').version(VERSION);
 
@@ -66,14 +66,14 @@ export function createCli() {
 			let file;
 
 			if (Object.keys(arg_collection).length > 0) {
-				collection_name = arg_collection.c
-				collection_file = `${collection_name}.json`
+				collection_name = arg_collection.c;
+				collection_file = `${collection_name}.json`;
 			}
 
 			try {
 				file = readFileSync(collection_file);
 			} catch (e) {
-				throw new Error(`No collection ${collection_name} found`)
+				throw new Error(`No collection ${collection_name} found`);
 			}
 
 			const json = JSON.parse(file);
@@ -84,7 +84,7 @@ export function createCli() {
 				} else {
 					console.log(`Notes in active collection ${collection_name}:`);
 				}
-				
+
 				json.forEach((note) => {
 					console.log(`${note.arg_title} (${new Date(note.timestamp).toISOString()})`);
 				});
@@ -125,23 +125,22 @@ export function createCli() {
 			console.log('Collection not found. Use -n option to create new collection.');
 		});
 
-	let active_collection;	
+	let active_collection;
 	let active_collection_file;
 
-	try {
-		const state_file = readFileSync('state.json');
-		const json_state = JSON.parse(state_file);
-		active_collection = json_state.active_collection;
-		active_collection_file = `${active_collection}.json`;
-	} catch (e) {
-		const active_collection = 'default_collection';
-		active_collection_file = `${active_collection}.json`;
-
-		const state_json = { active_collection };
+	if (!existsSync('state.json')) {
+		const state_json = { active_collection: 'default_collection' };
 		writeFileSync('state.json', JSON.stringify(state_json));
+	}
 
-		json = JSON.stringify([]);
-		writeFileSync(active_collection_file, json);
+	const state_file = readFileSync('state.json');
+	const json_state = JSON.parse(state_file);
+
+	active_collection = json_state.active_collection;
+	active_collection_file = `${active_collection}.json`;
+
+	if (!existsSync(active_collection_file)) {
+		writeFileSync(active_collection_file, JSON.stringify([]));
 	}
 
 	// Only call parse() when the script is executed directly, not when imported.
