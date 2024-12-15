@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import { error } from 'console';
 import { readFileSync, writeFileSync } from 'fs';
 
 export function createCli() {
@@ -49,19 +50,39 @@ export function createCli() {
 	cli
 		.command('l')
 		.description('list notes')
-		.action(() => {
-			const file = readFileSync(active_collection_file);
+		.option('-c <collection>')
+		.action((arg_collection) => {
+			let collection_file = active_collection_file;
+			let collection_name = active_collection;
+			let file;
+
+			if (Object.keys(arg_collection).length > 0) {
+				collection_name = arg_collection.c
+				collection_file = `${collection_name}.json`
+			}
+
+			try {
+				file = readFileSync(collection_file);
+			} catch (e) {
+				throw new Error(`No collection ${collection_name} found`)
+			}
+
 			const json = JSON.parse(file);
 
 			if (json.length > 0) {
-				console.log(`Notes in ${active_collection_file}:`);
+				if (collection_name) {
+					console.log(`Notes in collection ${collection_name}:`);
+				} else {
+					console.log(`Notes in active collection ${collection_name}:`);
+				}
+				
 				json.forEach((note) => {
 					console.log(`${note.arg_title} (${new Date(note.timestamp).toISOString()})`);
 				});
 				return;
 			}
 
-			console.log(`No notes founds in ${active_collection_file}`);
+			console.log(`No notes founds in ${collection_name}`);
 		});
 
 	cli
@@ -95,16 +116,15 @@ export function createCli() {
 			console.log('Collection not found. Use -n option to create new collection.');
 		});
 
+	let active_collection;	
 	let active_collection_file;
 
 	try {
 		const state_file = readFileSync('state.json');
 		const json_state = JSON.parse(state_file);
-		const active_collection = json_state.active_collection;
+		active_collection = json_state.active_collection;
 		active_collection_file = `${active_collection}.json`;
 	} catch (e) {
-		console.log('catch');
-
 		const active_collection = 'default_collection';
 		active_collection_file = `${active_collection}.json`;
 
@@ -120,7 +140,7 @@ export function createCli() {
 		cli.parse(process.argv);
 	}
 
-	return cli
+	return cli;
 }
 
-createCli()
+createCli();

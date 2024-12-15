@@ -47,7 +47,7 @@ describe('CLI Tests', () => {
         expect(consoleSpy).toHaveBeenCalledWith('TestBody');
     });
 
-    test('should list all notes', async () => {
+    test('should list all notes in active collection', async () => {
         // Prepopulate notes
         const notes = [
             { arg_title: 'Note1', arg_body: 'Body1', timestamp: Date.now() },
@@ -57,7 +57,22 @@ describe('CLI Tests', () => {
 
         await cli.parseAsync(['node', 'script', 'l']);
 
-        expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Notes in default_collection.json:'));
+        expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Notes in collection default_collection:'));
+        expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Note1'));
+        expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Note2'));
+    });
+
+    test('should list all notes in secondary collection', async () => {
+        // Prepopulate notes
+        const notes = [
+            { arg_title: 'Note1', arg_body: 'Body1', timestamp: Date.now() },
+            { arg_title: 'Note2', arg_body: 'Body2', timestamp: Date.now() },
+        ];
+        fs.writeFileSync('secondary_collection.json', JSON.stringify(notes));
+
+        await cli.parseAsync(['node', 'script', 'l', '-c', 'secondary_collection']);
+
+        expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Notes in collection secondary_collection:'));
         expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Note1'));
         expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Note2'));
     });
